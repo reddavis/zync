@@ -48,7 +48,7 @@ module Zync
     
       def load_folder(path)
         Dir.entries(path).each do |lib_file|
-          if lib_file != '.' && lib_file != '..'
+          if File.extname(lib_file) == '.rb'
             require "#{path}/#{lib_file}"
           end
         end if File.exists?(path)
