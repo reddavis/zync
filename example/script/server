@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require 'bundler'
+Bundler.setup
+
+require 'eventmachine'
+
+EM.run do
+  gem 'thin'
+  load Gem.bin_path('thin')
+end
