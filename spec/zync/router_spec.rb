@@ -49,10 +49,34 @@ describe Zync::Router do
     end
   end
 
+  describe "#call" do
+    describe "Route not found" do
+      before { @router = build_router }
+
+      it "should return 404" do
+        response = @router.call(request)
+        response[0].should == 404
+      end
+    end
+
+    describe "Request /" do
+      before { @router = build_router(test_routes) }
+
+      it "should call call" do
+        TestController.should_receive(:call).once
+        @router.call(request)
+      end
+    end
+  end
+
   private
 
-  def build_router(routes = test_routes)
-    Zync::Router.new(&routes)
+  def request(options={})
+    {'REQUEST_PATH' => "/"}.merge(options)
+  end
+
+  def build_router(new_routes = nil)
+    Zync::Router.new(&new_routes)
   end
 
   def test_routes

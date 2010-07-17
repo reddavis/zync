@@ -5,14 +5,12 @@ module Zync
 
     def initialize(&block)
       @routes = {}
-      build_routes(&block)
+      add_favicon_route
+      build_routes(&block) if block_given?
     end
 
     def build_routes(&block)
       instance_eval(&block)
-
-      # Add route for /favicon.ico crap
-      @routes['/favicon.ico'] = proc { [200, {}, []] }
     end
 
     def match(route, options={})
@@ -37,16 +35,23 @@ module Zync
       if endpoint.nil?
         not_found.call(env)
       elsif endpoint.respond_to?(:call)
+        # Favicon
+        # whats a better way to handle the /favicon.ico crap?
         endpoint.call(env)
       else
         endpoint[:controller].call(env, endpoint[:action])
       end
-
-      # whats a better way to handle the /favicon.ico crap?
     end
 
     def not_found
       proc {|env| [404, {'Content-Type' => 'text/plain'}, 'Not found'] }
+    end
+
+    private
+
+    def add_favicon_route
+      # Add route for /favicon.ico crap
+      @routes['/favicon.ico'] = proc { [200, {}, []] }
     end
 
   end
