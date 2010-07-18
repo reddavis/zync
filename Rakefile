@@ -10,7 +10,8 @@ begin
     #gem.email = "reddavis@gmail.com"
     #gem.homepage = "http://github.com/railslove/rack-throttle"
     #gem.authors = ["Arto Bendiken", "Brendon Murphy", "reddavis"]
-    #gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.add_development_dependency "em-spec", ">= 0.2.1"
     #gem.add_development_dependency "rack-test", ">= 0.5.3"
     #gem.add_runtime_dependency "rack", ">= 1.0.0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
