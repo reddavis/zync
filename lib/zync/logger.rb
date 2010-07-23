@@ -1,24 +1,36 @@
 module Zync
-  class Logger < ::Logger
+  class Logger
 
-    alias_method :old_warn, :warn
-    def warn(message, &block)
-      EM.next_tick { old_warn(message, &block) }
+    attr_reader :file_path
+
+    def initialize(file_path)
+      @file_path = file_path
     end
 
-    alias_method :old_debug, :debug
-    def debug(message, &block)
-      EM.next_tick { old_debug(message, &block) }
+    def warn(message)
+      write_to_file(:warn, message)
     end
 
-    alias_method :old_info, :info
-    def info(message, &block)
-      EM.next_tick { old_info(message, &block) }
+    def debug(message)
+      write_to_file(:debug, message)
     end
 
-    alias_method :old_fatal, :fatal
-    def fatal(message, &block)
-      EM.next_tick { old_fatal(message, &block) }
+    def info(message)
+      write_to_file(:info, message)
+    end
+
+    def fatal(message)
+      write_to_file(:fatal, message)
+    end
+
+    private
+
+    def write_to_file(level, message)
+      EM.system(
+        'sh',
+        Proc.new {|process| process.send_data("echo '#{message}' >> #{file_path}\n"); process.send_data("exit\n") },
+        Proc.new { }
+      )
     end
 
   end
