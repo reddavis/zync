@@ -28,7 +28,7 @@ module Zync
     def write_to_file(level, message)
       EM.system(
         'sh',
-        Proc.new {|process| process.send_data("echo '#{message}' >> #{file_path}\n"); process.send_data("exit\n") },
+        Proc.new {|process| process.send_data("echo '#{level}: #{message}' >> #{file_path}\n"); process.send_data("exit\n") },
         Proc.new { }
       )
     end
